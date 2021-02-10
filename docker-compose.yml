@@ -25,3 +25,12 @@ services:
     volumes:
       - ./app:/usr/src/app
       - ./sql:/sql
+
+  web:
+    env_file: .env
+    build:
+      context: ./docker/web
+    ports:
+      - 80:80
+    volumes:
+      - ./public:/usr/local/apache2/htdocs
