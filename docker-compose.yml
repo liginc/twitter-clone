@@ -11,6 +11,11 @@ services:
       - 3306:3306
     volumes:
       - ./sql:/docker-entrypoint-initdb.d:rw
+    environment:
+      MYSQL_DATABASE: twitter_clone
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
 
   node:
     env_file: .env
