@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mysql:
+    env_file: .env
+    build:
+      context: ./docker/mysql
+      args:
+        MYSQL_VER: ${MYSQL_VER}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d:rw
+    environment:
+      MYSQL_DATABASE: twitter_clone
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+  node:
+    env_file: .env
+    build:
+      context: ./docker/node
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+    links:
+      - mysql:mysql
+    volumes:
+      - ./app:/usr/src/app
+      - ./sql:/sql
+
+  web:
+    env_file: .env
+    build:
+      context: ./docker/web
+    ports:
+      - 80:80
+    volumes:
+      - ./www:/usr/local/apache2/htdocs
