@@ -1,0 +1,56 @@
+---
+openapi: 3.0.0
+info:
+  title: tweet一覧取得
+  description: tweet一覧取得
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /tweets:
+    get:
+      parameters:
+      - name: page
+        in: query
+        description: 指定したページを取得
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tweet'
+        "400":
+          description: bad input parameter
+components:
+  schemas:
+    tweet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        text:
+          type: string
+          example: ツイートですよ
+        user:
+          $ref: '#/components/schemas/user'
+        created_at:
+          type: string
+          format: date-time
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        display_name:
+          type: string
+          example: zuya
