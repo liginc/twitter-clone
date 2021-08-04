@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number
+  readonly id?: number
 
   @Column()
   name: string
@@ -14,18 +14,15 @@ export class User {
   @Column()
   email: string
 
-  @Column()
-  created_at: string
+  @CreateDateColumn({ type: 'timestamp' })
+  readonly created_at?: Date
 
-  @Column()
-  updated_at: string
+  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  readonly updated_at?: Date
 
-  constructor(id: number, name: string, display_name: string, email: string, created_at: string, updated_at: string) {
-    this.id = id
+  constructor(name: string, display_name: string, email: string) {
     this.name = name
     this.display_name = display_name
     this.email = email
-    this.created_at = created_at
-    this.updated_at = updated_at
   }
 }

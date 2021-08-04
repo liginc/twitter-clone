@@ -1,31 +1,29 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm"
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class Tweet {
   @PrimaryGeneratedColumn()
-  id: number
+  readonly id?: number
 
   @Column()
   text: string
 
-  @Column()
-  user_id: number
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user?: User
 
-  @Column()
-  created_at: string
+  @CreateDateColumn({ type: 'timestamp' })
+  readonly created_at?: Date
 
   @Column()
   delete_flag: boolean
 
-  @Column()
-  deleted_at: string
+  @DeleteDateColumn({ type: 'timestamp' })
+  readonly deleted_at?: Date
 
-  constructor(id: number, text: string, user_id: number, created_at: string, delete_flag: boolean, deleted_at: string) {
-    this.id = id
+  constructor(text: string, delete_flag: boolean) {
     this.text = text
-    this.user_id = user_id
-    this.created_at = created_at
     this.delete_flag = delete_flag
-    this.deleted_at = deleted_at
   }
 }
