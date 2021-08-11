@@ -1,21 +1,68 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
+import { createConnection, getRepository, Repository } from "typeorm";
+import { User } from "./entity/User";
 
-createConnection().then(async connection => {
+const createUser = async (userRepository: Repository<User>) => {
+    console.log('### Create ###')
 
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+    await userRepository.insert({
+        name: 'Taro',
+        display_name: 'taro_display',
+        email: 'taro@example.com'
+    })
 
-    console.log("Loading users from the database...");
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
+    await userRepository.save({
+        name: 'Jiro',
+        display_name: 'jiro_display',
+        email: 'jiro@example.com'
+    })
+}
 
-    console.log("Here you can setup and run express/koa/any other framework.");
+const readUser = async (userRepository: Repository<User>) => {
+    console.log('### Read ###')
+    
+    const users = await userRepository.find()
+    console.log(`All Users: ${JSON.stringify(users)}`)
 
-}).catch(error => console.log(error));
+    const user = await userRepository.findOne({ name: 'Taro' })
+    console.log(`Select User: ${JSON.stringify(user)}`)
+}
+
+const updateUser = async (userRepository: Repository<User>) => {
+    console.log('### Update ###')
+
+    await userRepository.update({ name: 'Taro' }, { email: 'taro1@example.com' })
+
+    const userTaro = await userRepository.findOne({ name: 'Taro' })
+    if (userTaro !== undefined) {
+        userTaro.email = 'taro2@example.com'
+        await userRepository.save(userTaro)
+    }
+
+    const users = await userRepository.find()
+    console.log(`All Users: ${JSON.stringify(users)}`)
+}
+
+const deleteUser = async (userRepository: Repository<User>) => {
+    console.log('### Delete ###')
+
+    const userTaro = await userRepository.findOne({ name: 'Taro' })
+    if (userTaro !== undefined) {
+        await userRepository.remove(userTaro)
+    }
+
+    const users = await userRepository.find()
+    console.log(`All Users: ${JSON.stringify(users)}`)
+}
+
+(async () => {
+    const connection = await createConnection()
+
+    const userRepository = getRepository(User)
+    await createUser(userRepository)
+    await readUser(userRepository)
+    await updateUser(userRepository)
+    await deleteUser(userRepository)
+
+    await connection.close()
+})()
