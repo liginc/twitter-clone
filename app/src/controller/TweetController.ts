@@ -14,6 +14,7 @@ export class TweetController {
   }
 
   async save(request: Request, response: Response, next: NextFunction) {
+    // TODO: 受け取ったトークンからユーザIDを逆引きしてbodyをごにょごにょしてsaveする
     return this.repository.save(request.body)
   }
 
