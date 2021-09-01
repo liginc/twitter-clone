@@ -16,7 +16,7 @@ export class Tweet {
   @CreateDateColumn({ type: 'timestamp' })
   readonly created_at?: Date
 
-  @Column()
+  @Column({ type: 'bit', default: false })
   delete_flag: boolean
 
   @DeleteDateColumn({ type: 'timestamp' })

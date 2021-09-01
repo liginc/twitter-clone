@@ -5,7 +5,7 @@
   "author": "First Last <first.last@example.com>",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "ts-node src/index.ts",
     "migration:generate": "ts-node --project ./tsconfig.json ./node_modules/.bin/typeorm migration:generate -n twitter-clone",
     "migration:run": "ts-node --project ./tsconfig.json ./node_modules/.bin/typeorm migration:run"
   },
