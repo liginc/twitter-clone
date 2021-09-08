@@ -5,11 +5,21 @@
   "author": "First Last <first.last@example.com>",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "ts-node src/index.ts",
+    "migration:generate": "ts-node --project ./tsconfig.json ./node_modules/.bin/typeorm migration:generate -n twitter-clone",
+    "migration:run": "ts-node --project ./tsconfig.json ./node_modules/.bin/typeorm migration:run"
   },
   "dependencies": {
     "express": "^4.16.1",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.34"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.9",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.4.4",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
 }
